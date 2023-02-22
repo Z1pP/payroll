@@ -3,11 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.Web", "Payroll.Web\Payroll.Web.csproj", "{77582430-972B-4C00-ABB9-DD2B9984E01E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payroll.Web", "Payroll.Web\Payroll.Web.csproj", "{77582430-972B-4C00-ABB9-DD2B9984E01E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.DataAccess", "Payroll.DataAccess\Payroll.DataAccess.csproj", "{077BB9EA-14D3-4F48-BFF8-13B2BE338DAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payroll.DataAccess", "Payroll.DataAccess\Payroll.DataAccess.csproj", "{077BB9EA-14D3-4F48-BFF8-13B2BE338DAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.Business", "Payroll.Business\Payroll.Business.csproj", "{63F86A73-F73A-4E8A-8D46-0AFB42C59D30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payroll.Business", "Payroll.Business\Payroll.Business.csproj", "{63F86A73-F73A-4E8A-8D46-0AFB42C59D30}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{E8F94CAA-AB41-4D54-8942-B00D78A14242}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructura", "infrastructura", "{18B57996-4783-4717-8491-34E800B6BB9E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "presentation", "presentation", "{45E8E066-669C-43A6-BBDC-D9E4874A07FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +36,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{77582430-972B-4C00-ABB9-DD2B9984E01E} = {45E8E066-669C-43A6-BBDC-D9E4874A07FB}
+		{077BB9EA-14D3-4F48-BFF8-13B2BE338DAC} = {E8F94CAA-AB41-4D54-8942-B00D78A14242}
+		{63F86A73-F73A-4E8A-8D46-0AFB42C59D30} = {18B57996-4783-4717-8491-34E800B6BB9E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C132A891-0B32-49EE-B059-52AA467D80A4}
