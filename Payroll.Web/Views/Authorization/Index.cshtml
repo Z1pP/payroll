@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Авторизация";
+}
+
+
+<!-- Pills content -->
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="container-sm">
+        <div class="card">
+            <div class="card-body">
+
+                <!-- Pills navs -->
+                <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="tab-login" data-mdb-toggle="pill" href="#pills-login" role="tab"
+                           aria-controls="pills-login" aria-selected="true">Login</a>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="tab-register" data-mdb-toggle="pill" href="#pills-register" role="tab"
+                           aria-controls="pills-register" aria-selected="false">Register</a>
+                    </li>
+                </ul>
+
+                <!-- Pills content -->
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+                        <form method="post" action="@Url.Action("Login","Home")">   
+                            
+                            <!-- Name input -->
+                            <div class="form-outline mb-4">
+                                <input type="text" name="name" class="form-control" />
+                                <label class="form-label" for="name">Введите имя</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block mb-4">Войти</button>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+                        <form method="post" action="@Url.Action("Registration","Home")">
+                            <!-- Name input -->
+                            <div class="form-outline mb-4">
+                                <input type="text" id="registerName" name="name" class="form-control" />
+                                <label class="form-label" for="registerName">Введите имя</label>
+                            </div>
+
+                            <!-- Username input -->
+                            <div class="form-outline mb-4">
+                                <label for="role">Выберите должность</label>
+                                <select class="form-controle" name="role">
+                                    <option value="">-- Выберите --</option>
+                                    <option value="Manager">Руководитель</option>
+                                    <option value="Worket">Сотрудник</option>
+                                    <option value="Freelancer">Фрилансер</option>
+                                </select>
+                            </div>
+                            <!-- Submit button -->
+                            <button type="submit" class="btn btn-primary btn-block mb-3">Регистрация</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Switch between Login and Register tabs
+    document.getElementById('tab-login').addEventListener('click', function () {
+        document.getElementById('tab-login').classList.add('active');
+        document.getElementById('tab-login').setAttribute('aria-selected', 'true');
+        document.getElementById('pills-login').classList.add('show', 'active');
+
+        document.getElementById('tab-register').classList.remove('active');
+        document.getElementById('tab-register').setAttribute('aria-selected', 'false');
+        document.getElementById('pills-register').classList.remove('show', 'active');
+    });
+
+    document.getElementById('tab-register').addEventListener('click', function () {
+        document.getElementById('tab-register').classList.add('active');
+        document.getElementById('tab-register').setAttribute('aria-selected', 'true');
+        document.getElementById('pills-register').classList.add('show', 'active');
+
+        document.getElementById('tab-login').classList.remove('active');
+        document.getElementById('tab-login').setAttribute('aria-selected', 'false');
+        document.getElementById('pills-login').classList.remove('show', 'active');
+    });
+</script>
+<style>
+    .container-sm {
+        max-width: 400px;
+    }
+</style>
