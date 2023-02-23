@@ -25,8 +25,8 @@
                 <!-- Pills content -->
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
-                        <form method="post" action="@Url.Action("Login","Home")">   
-                            
+                        <form method="post" action="@Url.Action("Login","Authorization")">
+
                             <!-- Name input -->
                             <div class="form-outline mb-4">
                                 <input type="text" name="name" class="form-control" />
@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
-                        <form method="post" action="@Url.Action("Registration","Home")">
+                        <form method="post" action="@Url.Action("Registration","Authorization")">
                             <!-- Name input -->
                             <div class="form-outline mb-4">
                                 <input type="text" id="registerName" name="name" class="form-control" />
@@ -51,7 +51,7 @@
                                 <select class="form-controle" name="role">
                                     <option value="">-- Выберите --</option>
                                     <option value="Manager">Руководитель</option>
-                                    <option value="Worket">Сотрудник</option>
+                                    <option value="Worker">Сотрудник</option>
                                     <option value="Freelancer">Фрилансер</option>
                                 </select>
                             </div>

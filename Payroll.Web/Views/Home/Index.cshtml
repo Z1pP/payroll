@@ -1,21 +1,54 @@
-﻿@model Employee
+﻿@model EmployeeViewModel
 
 @{
     ViewData["Title"] = "Домашняя страница";
 }
 
-<h1>Добро пожаловать @Model.Name</h1>
-<h2>Ваша роль - @Model.Role</h2>
+<h1>Добро пожаловать @Model.Employee.Name</h1>
+<h2>Ваша роль - @Model.Employee.Role</h2>
 
-@if(Model.Role == "Manager")
+@if (Model.Employee.Role == "Manager")
 {
-    <p>Менеджер</p>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Должность</th>
+                <th scope="col">Всего часов</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model.Employees)
+            {
+                <tr>                   
+                    <td>@employee.Id</td>
+                    <td>@employee.Name</td>
+                    <td>@employee.Role</td>
+                    <td>@employee.TotalWorkingHoursPerMonth</td>
+                    <td>
+                        <form action="@Url.Action("Details","Employee")" method="post">
+                            <input type="hidden" name="employeeId" value="@employee.Id">
+                            <button class="btn btn-info">Отчет</button>
+                        </form>                           
+                    </td>
+
+                    <td>
+                        <form action="@Url.Action("Delete","Employee")" method="post">
+                            <input type="hidden" name="employeeId" value="@employee.Id">
+                            <button class="btn btn-danger">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>       
+    </table>
 }
-else if(Model.Role == "Worker")
+else if (Model.Employee.Role == "Worker")
 {
-    <p>Работяга</p>
+    
 }
 else
 {
-    <p>Фрилансер</p>
+    
 }

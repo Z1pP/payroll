@@ -9,6 +9,7 @@ namespace Payroll.DataAccess.Interfaces
         Employee GetEmployeeByName(string name);
         Task DeleteEmployee(Employee employee);
         Task SaveEmployee(Employee employee);
+        Task UpdateEmployee(Employee employee);
 
 
     }

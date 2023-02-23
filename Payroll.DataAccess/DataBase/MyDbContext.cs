@@ -11,5 +11,13 @@ namespace Payroll.DataAccess.DataBase
         {
             Database.EnsureCreated();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Employee>()
+                        .HasMany(e => e.Missions)
+                        .WithOne(m => m.Employee)
+                        .HasForeignKey(m => m.EmployeeId);
+        }
     }
 }
