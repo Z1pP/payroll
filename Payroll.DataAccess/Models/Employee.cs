@@ -6,8 +6,8 @@ namespace Payroll.DataAccess.Models
     public class Employee
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
-        public string? Role { get; set; }
+        public string Name { get; set; }
+        public string Role { get; set; }
         public int TotalWorkingHoursPerMonth { get; set; }
         public List<Mission> Missions { get; set; } = new List<Mission>();
         public Employee()

@@ -34,7 +34,7 @@ namespace Payroll.DataAccess.Services
                 employeeRepository.SaveEmployee(employee);
             }
 
-            if(employee.RoleIsConstain(role))
+            else if (employee.RoleIsConstain(role))
             {
                 return false;
             }

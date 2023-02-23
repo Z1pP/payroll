@@ -33,10 +33,19 @@ namespace Payroll.Business
 
             await dbContext.SaveChangesAsync();
         }
+        public async Task UpdateEmployee(Employee employee)
+        {
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee), "Пустой объект");
+            }
+            dbContext.Update(employee);
 
+            await dbContext.SaveChangesAsync();
+        }
         public Employee GetEmployeeById(int id)
         {
-            var employee = dbContext.Employees.Single(x => x.Id == id);
+            var employee = dbContext.Employees.SingleOrDefault(x => x.Id == id);
 
             return employee;
         }

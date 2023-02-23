@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Payroll.Business;
+using Payroll.Business.Services;
 using Payroll.DataAccess.DataBase;
 using Payroll.DataAccess.Interfaces;
+using Payroll.DataAccess.Repositories;
 using Payroll.DataAccess.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +15,10 @@ builder.Services.AddDbContext<MyDbContext>(options => options.UseSqlServer(conne
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IMissionRepository, MissionRepository>();
 builder.Services.AddScoped<AuthorizationService>();
+builder.Services.AddScoped<EmployeeService>();
+builder.Services.AddScoped<ReportService>();
 
 
 var app = builder.Build();

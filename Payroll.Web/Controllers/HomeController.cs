@@ -1,51 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Payroll.DataAccess.Services;
+using Payroll.Business.Services;
+using Payroll.DataAccess.Models;
+using Payroll.Web.Models;
 
 namespace Payroll.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly AuthorizationService authorization;
-        public HomeController(AuthorizationService authorization)
+        private readonly EmployeeService _employeeService;
+        public HomeController(EmployeeService employeeService)
         {
-            this.authorization = authorization;
+            _employeeService = employeeService;
         }
-        public IActionResult Index()
+        public IActionResult Index(Employee employee)
         {
-            return View();
-        }
+            var listEmployees = _employeeService.GetEmployees();
 
-
-        [HttpPost, ActionName("Login")]
-        public IActionResult Login(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
+            var employeeModel = new EmployeeViewModel
             {
-                return View();
-            }
+                Employee = employee,
+                Employees = listEmployees
+            };
 
-            var employee = authorization.GetRoleEmployee(name);
-            
-            if(employee == null)
-            {
-                return View();
-            }
-           
-            return View("Index",employee);
-        }
-
-        [HttpPost, ActionName("Registration")]
-        public IActionResult Registration(string name, string role)
-        {
-            bool result = authorization.RegistationEmployee(name, role);
-
-            if (result == true)
-            {
-                return RedirectToAction("Index");
-            }
-
-            ModelState.AddModelError("Role", "Сотрудник с такой должностью уже существует");
-            return RedirectToAction("Index", "Authorization");
+            return View(employeeModel);
         }
     }
 }
