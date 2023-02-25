@@ -18,20 +18,21 @@ namespace Payroll.Business.Services
 
             return employee;
         }
-        public bool RegistationEmployee(string name, string role)
+        public bool EmployeeExist(string name, string role)
         {
             var employee = _employeeRepository.GetEmployeeByName(name);
 
-            if (employee == null) 
+            if (employee != null && employee.Role != role)
             {
-                employee = new Employee(name, role);
-
-                _employeeRepository.SaveEmployee(employee);
+                return true;
             }
 
-            
-            return true;
+            return false;
         }
 
+        public void AddEmployee(string name, string role)
+        {
+            _employeeRepository.SaveEmployee(new Employee(name, role));
+        }
     }
 }

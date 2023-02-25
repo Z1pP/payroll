@@ -17,6 +17,12 @@ namespace Payroll.DataAccess.Repositories
             this.dbContext = dbContext;
         }
 
+        public void RemoveMission(Mission mission)
+        {
+            dbContext.Missions.RemoveRange(mission);
+            dbContext.SaveChanges();
+        }
+
         public List<Mission> GetMissions()
         {
             return dbContext.Missions.ToList();
@@ -26,6 +32,19 @@ namespace Payroll.DataAccess.Repositories
         {
             dbContext.Missions.Add(mission);
 
+            dbContext.SaveChanges();
+        }
+
+        public Mission GetMissionById(int id)
+        {
+            var mission = dbContext.Missions.SingleOrDefault(x => x.Id == id);
+
+            return mission;
+        }
+
+        public void UpdateMission(Mission mission)
+        {
+            dbContext.Missions.Update(mission);
             dbContext.SaveChanges();
         }
     }

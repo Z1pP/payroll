@@ -1,6 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Payroll.DataAccess.Interfaces;
+﻿using Payroll.DataAccess.Interfaces;
 using Payroll.DataAccess.Models;
 
 namespace Payroll.Business.Services
@@ -19,5 +17,20 @@ namespace Payroll.Business.Services
             _missionRepository.SaveMission(mission);
         }
 
+        public void RemoveMission(Mission mission)
+        {
+            _missionRepository.RemoveMission(mission);
+        }
+
+        public Mission GetMissionById(int id)
+        {
+            return _missionRepository.GetMissionById(id);
+        }
+
+        public void UpdateMission(Mission mission)
+        {
+
+            _missionRepository.UpdateMission(mission);
+        }
     }
 }

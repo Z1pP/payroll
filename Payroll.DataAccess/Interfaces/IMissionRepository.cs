@@ -8,5 +8,8 @@ namespace Payroll.DataAccess.Interfaces
         public List<Mission> GetMissions();
 
         public void SaveMission(Mission mission);
+        public void RemoveMission(Mission mission);
+        public  Mission GetMissionById(int id);
+        public void UpdateMission(Mission mission);
     }
 }

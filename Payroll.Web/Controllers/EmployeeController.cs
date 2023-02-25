@@ -25,17 +25,17 @@ namespace Payroll.Web.Controllers
         [HttpPost]
         public IActionResult Remove(int employeeId)
         {
-            HttpContext.Session.TryGetEmployee(out Employee employee);
+            HttpContext.Session.TryGetEmployee(out Employee? employee);
 
-            if (employee.Id == employeeId)
+            var removedEmployee = _employeeService.GetEmployeeById(employeeId);
+
+            //Если удаляемый сотрудник это сорудник из сессии
+            if (employee.Id == removedEmployee.Id)
             {
                 return BadRequest("Нельзя удалить самого себя");
             }
-
-            _employeeService?.RemoveEmployee(employeeId);
-
-            var listEmployee = _employeeService.GetEmployees();
-
+            
+            _employeeService?.RemoveEmployee(removedEmployee);
 
             return RedirectToAction("Index","Home");
         }

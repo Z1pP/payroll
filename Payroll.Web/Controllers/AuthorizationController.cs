@@ -21,17 +21,20 @@ namespace Payroll.Web.Controllers
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                return View();
+                ModelState.AddModelError("empty","Не корректно введены данные");
             }
 
+            //Получаем сотрудника из бд
             var employee = _authorization.GetRoleEmployee(name);
 
             if (employee == null)
             {
-                return BadRequest("Такого сотрудника у нас нет");
+                ModelState.AddModelError("loginError","Такого сотрудника нет");
+                return View("Index", ModelState);
             }
 
-            HttpContext.Session.Set(employee); //записываем сотдрудника в сессию
+            //Записываем сотдрудника в сессию
+            HttpContext.Session.Set(employee); 
             
             return RedirectToAction("Index","Home");
         }
@@ -39,15 +42,28 @@ namespace Payroll.Web.Controllers
         [HttpPost, ActionName("Registration")]
         public IActionResult Registration(string name, string role)
         {
-            bool result = _authorization.RegistationEmployee(name, role);
-
-            if (result == true)
+            try
             {
-                return RedirectToAction("Index", "Authorization");
+                //Проверка существует ли такой сотрудник
+                bool result = _authorization.EmployeeExist(name, role);
+
+                if (result == true)
+                {
+                    ModelState.AddModelError("role","Сотрудник уже существует");
+                }
+                else
+                {
+                    //Добавляем сотрудника
+                    _authorization.AddEmployee(name,role);
+                    return View("Index");
+                }
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("regError","Ошибка при добавлении сотрудника");
             }
 
-            ModelState.AddModelError("Role", "Сотрудник с такой должностью уже существует");
-            return RedirectToAction("Index", "Authorization");
+            return View("Index",ModelState);
         }
 
         public IActionResult Logout()

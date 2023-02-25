@@ -1,5 +1,4 @@
-﻿
-using Payroll.DataAccess.DataBase;
+﻿using Payroll.DataAccess.DataBase;
 using Payroll.DataAccess.Interfaces;
 using Payroll.DataAccess.Models;
 

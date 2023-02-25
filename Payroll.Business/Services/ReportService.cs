@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Payroll.DataAccess.Interfaces;
+﻿using Payroll.DataAccess.Interfaces;
 using Payroll.DataAccess.Models;
 
 namespace Payroll.Business.Services
@@ -39,7 +38,7 @@ namespace Payroll.Business.Services
 
         private static decimal GetTotalSalary(Employee employee, int totalHours)
         {
-            employee.TotalWorkingHoursPerMonth += totalHours;
+            employee.TotalWorkingHoursPerMonth = totalHours;
 
             decimal totalSalary;
 

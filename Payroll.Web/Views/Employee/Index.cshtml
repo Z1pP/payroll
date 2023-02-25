@@ -59,13 +59,19 @@
                 <td>@mission.Date.ToString("dd.MM.yyyy")</td>
                 <td>@mission.WorkingTime</td>
                 <td>
-                    <form action="@Url.Action("Details","Employee")" method="post">
-                        <input type="hidden" name="missionId" value="@mission.Id">
-                        <button class="btn btn-info">Изменить</button>
+                    <button class="btn btn-info" onclick="showEditForm(@mission.Id)">Изменить</button>
+                    <form id="edit-form-@mission.Id" style="display: none;" onsubmit="submitEditForm(event, @mission.Id)">
+
+                        <!-- Форма для редактирования -->
+                        <input type="text" name="description" value="@mission.Description" required/>
+                        <input type="date" name="date" value="@mission.Date.ToString("yyyy-MM-dd")" required/>
+                        <input type="number" name="workingTime" value="@mission.WorkingTime" required/>
+                        <button type="submit" class="btn btn-success">Сохранить</button>
+                        <button type="button" class="btn btn-danger" onclick="hideEditForm(@mission.Id)">Отмена</button>
                     </form>
                 </td>
                 <td>
-                    <form action="@Url.Action("Remove","Employee")" method="post">
+                    <form action="@Url.Action("Remove","Mission")" method="post">
                         <input type="hidden" name="missionId" value="@mission.Id">
                         <button class="btn btn-danger">Удалить</button>
                     </form>
@@ -101,10 +107,39 @@
     }
 </script>
 
+<script>
+    function showEditForm(missionId) {
+        var editForm = document.getElementById("edit-form-" + missionId);
+        var editButton = editForm.previousElementSibling;
+        editButton.style.display = "none";
+        editForm.style.display = "block";
+    }
 
+    function hideEditForm(missionId) {
+        var editForm = document.getElementById("edit-form-" + missionId);
+        var editButton = editForm.previousElementSibling;
+        editButton.style.display = "inline-block";
+        editForm.style.display = "none";
+    }
+</script>
 
-
-
+<script>
+    function submitEditForm(event, missionId) {
+        event.preventDefault();
+        var editForm = document.getElementById("edit-form-" + missionId);
+        var formData = new FormData(editForm);
+        formData.append("id", missionId);
+        fetch("@Url.Action("Edit", "Mission")", {
+            method: "POST",
+            body: formData
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    location.reload();
+                }
+            });
+    }
+</script>
 
 
 

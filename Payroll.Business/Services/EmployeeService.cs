@@ -24,9 +24,9 @@ namespace Payroll.Business.Services
             return _employeeRepository.GetEmployeeById(id);
         }
 
-        public void RemoveEmployee(int id)
+        public void RemoveEmployee(Employee employee)
         {
-            _employeeRepository.RemoveEmployeeById(id);
+            _employeeRepository.RemoveEmplyee(employee);
         }
     }
 }

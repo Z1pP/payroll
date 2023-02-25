@@ -18,7 +18,7 @@ namespace Payroll.Web.Controllers
         {
             HttpContext.Session.TryGetEmployee(out Employee? employee);
 
-            if (employee.Role != "Manager" && employee.Id != mission.EmployeeId)
+            if (employee?.Role != "Manager" && employee?.Id != mission.EmployeeId)
             {
                 return BadRequest("Недостаточно доступа");
             }
@@ -26,6 +26,27 @@ namespace Payroll.Web.Controllers
             _missionService.SaveMission(mission);
 
             return RedirectToAction("Details", "Employee",new{ employeeId = mission.EmployeeId});
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, Mission mission)
+        {
+            var existingMission = _missionService.GetMissionById(id);
+            existingMission.Description = mission.Description;
+            existingMission.Date = mission.Date;
+            existingMission.WorkingTime = mission.WorkingTime;
+
+            _missionService.UpdateMission(existingMission);
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult Remove(int missionId)
+        {
+            var mission = _missionService.GetMissionById(missionId);
+            _missionService.RemoveMission(mission);
+
+            return RedirectToAction("Details", "Employee", new { employeeId  = mission.EmployeeId});
         }
     }
 }

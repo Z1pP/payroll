@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Text;
+﻿using System.Text;
 using Payroll.DataAccess.Models;
 
 namespace Payroll.Web
