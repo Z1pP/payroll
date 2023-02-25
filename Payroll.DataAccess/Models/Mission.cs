@@ -1,12 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Payroll.DataAccess.Models
 {
     public class Mission
     {
-        public int Id { get; set; }       
-        public string? Discription { get; set; }
+        public int Id { get; set; }
+        [Required]
+        public string? Description { get; set; }
         public int WorkingTime { get; set; }
+        [Required]
         public DateTime Date { get; set; } = DateTime.UtcNow.Date;
 
         public int EmployeeId { get; set; }
@@ -15,9 +17,9 @@ namespace Payroll.DataAccess.Models
         {
 
         }
-        public Mission(string disctiption, int workingTime)
+        public Mission(string desctiption, int workingTime)
         {
-            Discription = disctiption;
+            Description = desctiption;
             WorkingTime = workingTime;
         }
     }

@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Payroll.DataAccess.Services;
+using Payroll.Business.Services;
 
 namespace Payroll.Web.Controllers
 {
     public class AuthorizationController : Controller
     {
-        private readonly AuthorizationService authorization;
+        private readonly AuthorizationService _authorization;
         public AuthorizationController(AuthorizationService authorization)
         {
-            this.authorization = authorization;
+            _authorization = authorization;
         }
         public IActionResult Index()
         {
@@ -24,20 +24,22 @@ namespace Payroll.Web.Controllers
                 return View();
             }
 
-            var employee = authorization.GetRoleEmployee(name);
+            var employee = _authorization.GetRoleEmployee(name);
 
             if (employee == null)
             {
-                return View();
+                return BadRequest("Такого сотрудника у нас нет");
             }
 
-            return RedirectToAction("Index","Home", employee);
+            HttpContext.Session.Set(employee); //записываем сотдрудника в сессию
+            
+            return RedirectToAction("Index","Home");
         }
 
         [HttpPost, ActionName("Registration")]
         public IActionResult Registration(string name, string role)
         {
-            bool result = authorization.RegistationEmployee(name, role);
+            bool result = _authorization.RegistationEmployee(name, role);
 
             if (result == true)
             {
@@ -46,6 +48,12 @@ namespace Payroll.Web.Controllers
 
             ModelState.AddModelError("Role", "Сотрудник с такой должностью уже существует");
             return RedirectToAction("Index", "Authorization");
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return View("Index");
         }
     }
 }

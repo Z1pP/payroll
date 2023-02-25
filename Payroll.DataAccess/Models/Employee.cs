@@ -1,12 +1,13 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Payroll.DataAccess.Models
 {
     public class Employee
     {
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Role { get; set; }
         public int TotalWorkingHoursPerMonth { get; set; }
         public List<Mission> Missions { get; set; } = new List<Mission>();
@@ -19,14 +20,6 @@ namespace Payroll.DataAccess.Models
         {
             Name = name;
             Role = role;
-        }
-
-        public bool RoleIsConstain(string role)
-        {
-            if (Role == role)
-                return true;
-
-            return false;
         }
     }
 }

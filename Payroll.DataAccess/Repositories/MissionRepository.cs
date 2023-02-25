@@ -8,6 +8,10 @@ namespace Payroll.DataAccess.Repositories
     {
         private MyDbContext dbContext;
 
+        public MissionRepository()
+        {
+            
+        }
         public MissionRepository(MyDbContext dbContext)
         {
             this.dbContext = dbContext;
@@ -16,6 +20,13 @@ namespace Payroll.DataAccess.Repositories
         public List<Mission> GetMissions()
         {
             return dbContext.Missions.ToList();
+        }
+
+        public void SaveMission(Mission mission)
+        {
+            dbContext.Missions.Add(mission);
+
+            dbContext.SaveChanges();
         }
     }
 }

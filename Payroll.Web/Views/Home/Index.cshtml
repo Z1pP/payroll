@@ -1,13 +1,15 @@
-﻿@model EmployeeViewModel
+﻿@model List<Employee>
 
 @{
     ViewData["Title"] = "Домашняя страница";
+    Context.Session.TryGetEmployee(out Employee empl);
 }
 
-<h1>Добро пожаловать @Model.Employee.Name</h1>
-<h2>Ваша роль - @Model.Employee.Role</h2>
+<h1>Добро пожаловать @empl.Name</h1>
+<h2>Ваша роль - @empl.Role</h2>
 
-@if (Model.Employee.Role == "Manager")
+
+@if (empl.Role == "Manager")
 {
     <table class="table">
         <thead class="thead-dark">
@@ -19,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var employee in Model.Employees)
+            @foreach (var employee in Model)
             {
                 <tr>                   
                     <td>@employee.Id</td>
@@ -34,7 +36,7 @@
                     </td>
 
                     <td>
-                        <form action="@Url.Action("Delete","Employee")" method="post">
+                        <form action="@Url.Action("Remove","Employee")" method="post">
                             <input type="hidden" name="employeeId" value="@employee.Id">
                             <button class="btn btn-danger">Удалить</button>
                         </form>
@@ -44,11 +46,70 @@
         </tbody>       
     </table>
 }
-else if (Model.Employee.Role == "Worker")
+else if (empl.Role == "Worker")
 {
-    
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Должность</th>
+            <th scope="col">Всего часов</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>                   
+                <td>@employee.Id</td>
+                <td>@employee.Name</td>
+                <td>@employee.Role</td>
+                <td>@employee.TotalWorkingHoursPerMonth</td>
+                <td>
+                    @if (employee.Id == empl.Id)
+                    {
+                        <form action="@Url.Action("Details","Employee")" method="post">
+                            <input type="hidden" name="employeeId" value="@employee.Id">
+                            <button class="btn btn-info">Отчет</button>
+                        </form>
+                    }
+                </td>
+
+            </tr>
+        }
+        </tbody>       
+    </table>
 }
 else
 {
-    
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Должность</th>
+            <th scope="col">Всего часов</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>                   
+                <td>@employee.Id</td>
+                <td>@employee.Name</td>
+                <td>@employee.Role</td>
+                <td>@employee.TotalWorkingHoursPerMonth</td>
+                <td>
+                    @if (employee.Id == empl.Id)
+                    {
+                        <form action="@Url.Action("Details","Employee")" method="post">
+                            <input type="hidden" name="employeeId" value="@employee.Id">
+                            <button class="btn btn-info">Отчет</button>
+                        </form>
+                    }                          
+                </td>
+            </tr>
+        }
+        </tbody>       
+    </table>
 }

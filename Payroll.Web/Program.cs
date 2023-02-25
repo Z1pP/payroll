@@ -1,23 +1,29 @@
 using Microsoft.EntityFrameworkCore;
-using Payroll.Business;
 using Payroll.Business.Services;
 using Payroll.DataAccess.DataBase;
 using Payroll.DataAccess.Interfaces;
 using Payroll.DataAccess.Repositories;
-using Payroll.DataAccess.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<MyDbContext>(options => options.UseSqlServer(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IMissionRepository, MissionRepository>();
 builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<EmployeeService>();
+builder.Services.AddScoped<MissionService>();
 builder.Services.AddScoped<ReportService>();
 
 
@@ -39,6 +45,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -1,13 +1,13 @@
-﻿using Payroll.DataAccess.Interfaces;
+﻿using System.Security.Cryptography.X509Certificates;
+using Payroll.DataAccess.Interfaces;
 using Payroll.DataAccess.Models;
-using System.Runtime.CompilerServices;
 
 namespace Payroll.Business.Services
 {    
     public class ReportService
     {
-        private static  IEmployeeRepository _employeeRepository;
-        private static IMissionRepository _missionRepository;
+        private static  IEmployeeRepository? _employeeRepository;
+        private static IMissionRepository? _missionRepository;
 
         public ReportService(IEmployeeRepository employeeRepository, IMissionRepository missionRepository)
         {
@@ -17,13 +17,13 @@ namespace Payroll.Business.Services
 
         public  Report GetReportForEmployeeById(int id)
         {
-            var employee = _employeeRepository.GetEmployeeById(id);
+            var employee = _employeeRepository?.GetEmployeeById(id);
 
-            var missions = _missionRepository.GetMissions();
+            var missions = _missionRepository?.GetMissions();
 
             employee.Missions = missions.Where(x => x.EmployeeId == employee.Id).ToList();
 
-            int totalTime = missions.Sum(x => x.WorkingTime);
+            var totalTime = employee.Missions.Sum(x => x.WorkingTime);
 
             var report = new Report
             {
@@ -37,32 +37,31 @@ namespace Payroll.Business.Services
             return report;
         }
 
-        private decimal GetTotalSalary(Employee employee, int totalHours)
+        private static decimal GetTotalSalary(Employee employee, int totalHours)
         {
             employee.TotalWorkingHoursPerMonth += totalHours;
 
-            decimal totalSalary = 0;
+            decimal totalSalary;
 
-            if (employee.Role == "Manager")
+            switch (employee.Role)
             {
-                totalSalary = ((decimal)employee.TotalWorkingHoursPerMonth) / 160 * 200000m;
+                case "Manager":
+                {
+                    totalSalary = (decimal)employee.TotalWorkingHoursPerMonth / 160 * 200000m;
 
-                if (totalHours > 160)
-                    totalSalary += 20000; // премия
+                    if (totalHours > 160)
+                        totalSalary += 20000; // премия
+                    break;
+                }
+                case "Worker":
+                    totalSalary = (decimal)employee.TotalWorkingHoursPerMonth / 160 * 120000m;
+                    break;
+                default:
+                    totalSalary = 1000 * (decimal)employee.TotalWorkingHoursPerMonth;
+                    break;
             }
 
-            else if (employee.Role == "Worker")
-            {
-                totalSalary = ((decimal)employee.TotalWorkingHoursPerMonth) / 160 * 120000m;
-            }
-
-            //Freelancer
-            else
-            {
-                totalSalary = 1000 * ((decimal)employee.TotalWorkingHoursPerMonth);
-            }
-
-            _employeeRepository.UpdateEmployee(employee);
+            _employeeRepository?.UpdateEmployee(employee);
 
             return totalSalary;
         }

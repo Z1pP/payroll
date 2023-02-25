@@ -1,0 +1,111 @@
+﻿
+@model Report
+@{
+    Context.Session.TryGetEmployee(out Employee empl);
+}
+
+@{
+    ViewData["Title"] = "Отчет";
+}
+
+<h1>@Model.Employee.Name</h1>
+
+
+<button id="toggleButton" class="btn btn-outline-warning" onclick="toggleForms()">Добавить запись</button>
+
+<div id="form1" style="display: none;">
+
+    <form action="@Url.Action("Add", "Mission")" method="post">
+
+        <div class="form-group">
+            <label for="description">Описание</label>
+            <textarea class="form-control" id="description" name="description"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="date">Дата</label>
+            <input class="form-control" type="date" id="date" name="date"/>
+        </div>
+
+        <div class="form-group">
+            <label for="working-time">Часы работы</label>
+            <input class="form-control" type="number" id="working-time" name="workingTime"/>
+        </div>
+
+        <input type="hidden" id="employeeId" name="employeeId" value="@Model.Employee.Id"/>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+</div>
+
+<div id="form2">
+    <table id="employee-missions" class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Описание</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Часы работы</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var mission in Model.Missions)
+        {
+            <tr>
+                <td>@mission.Id</td>
+                <td>@mission.Description</td>
+                <td>@mission.Date.ToString("dd.MM.yyyy")</td>
+                <td>@mission.WorkingTime</td>
+                <td>
+                    <form action="@Url.Action("Details","Employee")" method="post">
+                        <input type="hidden" name="missionId" value="@mission.Id">
+                        <button class="btn btn-info">Изменить</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="@Url.Action("Remove","Employee")" method="post">
+                        <input type="hidden" name="missionId" value="@mission.Id">
+                        <button class="btn btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th><strong>Всего часов @Model.TotalHours</strong></th>
+                <th><strong>Зарплата @Model.TotalSalary.ToString("##,000 руб")</strong></th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script>
+    function toggleForms() {
+        var form1 = document.getElementById("form1");
+        var form2 = document.getElementById("form2");
+        var button = document.getElementById("toggleButton");
+
+        if (form1.style.display === "none") {
+            form1.style.display = "block";
+            form2.style.display = "none";
+            button.innerHTML = "Скрыть форму";
+        } else {
+            form1.style.display = "none";
+            form2.style.display = "block";
+            button.innerHTML = "Добавить запись";
+        }
+    }
+</script>
+
+
+
+
+
+
+
+
+
