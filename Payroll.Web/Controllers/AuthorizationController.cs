@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Payroll.DataAccess.Services;
+using Payroll.Business.Services;
 
 namespace Payroll.Web.Controllers
 {
     public class AuthorizationController : Controller
     {
-        private readonly AuthorizationService authorization;
+        private readonly AuthorizationService _authorization;
         public AuthorizationController(AuthorizationService authorization)
         {
-            this.authorization = authorization;
+            _authorization = authorization;
         }
         public IActionResult Index()
         {
@@ -21,31 +21,55 @@ namespace Payroll.Web.Controllers
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                return View();
+                ModelState.AddModelError("empty","Не корректно введены данные");
             }
 
-            var employee = authorization.GetRoleEmployee(name);
+            //Получаем сотрудника из бд
+            var employee = _authorization.GetRoleEmployee(name);
 
             if (employee == null)
             {
-                return View();
+                ModelState.AddModelError("loginError","Такого сотрудника нет");
+                return View("Index", ModelState);
             }
 
-            return RedirectToAction("Index","Home", employee);
+            //Записываем сотдрудника в сессию
+            HttpContext.Session.Set(employee); 
+            
+            return RedirectToAction("Index","Home");
         }
 
         [HttpPost, ActionName("Registration")]
         public IActionResult Registration(string name, string role)
         {
-            bool result = authorization.RegistationEmployee(name, role);
-
-            if (result == true)
+            try
             {
-                return RedirectToAction("Index", "Authorization");
+                //Проверка существует ли такой сотрудник
+                bool result = _authorization.EmployeeExist(name, role);
+
+                if (result == true)
+                {
+                    ModelState.AddModelError("role","Сотрудник уже существует");
+                }
+                else
+                {
+                    //Добавляем сотрудника
+                    _authorization.AddEmployee(name,role);
+                    return View("Index");
+                }
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("regError","Ошибка при добавлении сотрудника");
             }
 
-            ModelState.AddModelError("Role", "Сотрудник с такой должностью уже существует");
-            return RedirectToAction("Index", "Authorization");
+            return View("Index",ModelState);
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return View("Index");
         }
     }
 }

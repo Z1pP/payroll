@@ -7,9 +7,10 @@ namespace Payroll.DataAccess.Interfaces
         List<Employee> GetEmployees();
         Employee GetEmployeeById(int id);
         Employee GetEmployeeByName(string name);
-        Task DeleteEmployee(Employee employee);
-        Task SaveEmployee(Employee employee);
-        Task UpdateEmployee(Employee employee);
+        void RemoveEmplyee(Employee employee);
+        void RemoveEmployeeById(int id);
+        void SaveEmployee(Employee employee);
+        void UpdateEmployee(Employee employee);
 
 
     }

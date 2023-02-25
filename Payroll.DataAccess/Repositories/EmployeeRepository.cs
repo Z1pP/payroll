@@ -2,64 +2,84 @@
 using Payroll.DataAccess.Interfaces;
 using Payroll.DataAccess.Models;
 
-namespace Payroll.Business
+namespace Payroll.DataAccess.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private readonly MyDbContext dbContext;
+        private readonly MyDbContext _dbContext;
         public EmployeeRepository(MyDbContext dbContext) 
         {
-            this.dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
-        public async Task DeleteEmployee(Employee employee)
+        public EmployeeRepository()
+        {
+                
+        }
+
+        public void RemoveEmplyee(Employee employee)
         {
             if (employee == null)
             {
                 throw new ArgumentNullException(nameof(employee), "Пустой объект");
             }
 
-            dbContext.Remove(employee);
-            await dbContext.SaveChangesAsync();
+            var missions = _dbContext.Missions.Where(s => s.EmployeeId == employee.Id);
+
+            _dbContext.Missions.RemoveRange(missions);
+            _dbContext.Employees.RemoveRange(employee);
+            _dbContext.SaveChanges();
         }
-        public async Task SaveEmployee(Employee employee)
+
+        public void RemoveEmployeeById(int id)
+        {
+            var employee = GetEmployeeById(id);
+
+            RemoveEmplyee(employee);
+
+        }
+
+        public void SaveEmployee(Employee employee)
+        {
+            if (employee == null)
+                throw new ArgumentNullException(nameof(employee), "Пустой объект");
+
+            _dbContext.Employees.Add(employee);
+
+            _dbContext.SaveChanges();
+        }
+        public void UpdateEmployee(Employee employee)
         {
             if (employee == null)
             {
                 throw new ArgumentNullException(nameof(employee), "Пустой объект");
             }
+            _dbContext.Update(employee);
 
-            dbContext.AddAsync(employee);
-
-            await dbContext.SaveChangesAsync();
-        }
-        public async Task UpdateEmployee(Employee employee)
-        {
-            if (employee == null)
-            {
-                throw new ArgumentNullException(nameof(employee), "Пустой объект");
-            }
-            dbContext.Update(employee);
-
-            await dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
         }
         public Employee GetEmployeeById(int id)
         {
-            var employee = dbContext.Employees.SingleOrDefault(x => x.Id == id);
+            var employee = _dbContext.Employees.SingleOrDefault(x => x.Id == id);
+
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee), "Пустой объект");
+            }
 
             return employee;
         }
 
         public Employee GetEmployeeByName(string name)
         {
-            var employee = dbContext.Employees.SingleOrDefault(x => x.Name.ToUpper() == name.ToUpper());
+            var employee = _dbContext.Employees.SingleOrDefault(x => x.Name.ToUpper() == name.ToUpper());
 
             return employee;
         }
 
         public List<Employee> GetEmployees()
         {
-            return dbContext.Employees.ToList();
+            return _dbContext.Employees.ToList();
         }
     }
 }

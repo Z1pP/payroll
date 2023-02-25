@@ -1,11 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Payroll.DataAccess.Models
+﻿namespace Payroll.DataAccess.Models
 {
     public class Report
     {
