@@ -5,24 +5,21 @@ namespace Payroll.Business.Services
 {    
     public class ReportService
     {
-        private static  IEmployeeRepository? _employeeRepository;
-        private static IMissionRepository? _missionRepository;
+        private static EmployeeService? _employeeService;
 
-        public ReportService(IEmployeeRepository employeeRepository, IMissionRepository missionRepository)
+        public ReportService(EmployeeService employeeService)
         {
-            _employeeRepository = employeeRepository;
-            _missionRepository = missionRepository;
+            _employeeService = employeeService;
         }
 
+        //Получаем отчет по зарплате сотрудника через его ID
         public  Report GetReportForEmployeeById(int id)
         {
-            var employee = _employeeRepository?.GetEmployeeById(id);
+            var employee = _employeeService.GetEmployeeById(id);
 
-            var missions = _missionRepository?.GetMissions();
+            var employeeMissions = _employeeService.GetEmployeeMissions(id);
 
-            employee.Missions = missions.Where(x => x.EmployeeId == employee.Id).ToList();
-
-            var totalTime = employee.Missions.Sum(x => x.WorkingTime);
+            var totalTime = employeeMissions.Sum(x => x.WorkingTime);
 
             var report = new Report
             {
@@ -36,6 +33,7 @@ namespace Payroll.Business.Services
             return report;
         }
 
+        //Проводим рассчеты Зп исходя из задания для каждого отдельного сотрудника
         private static decimal GetTotalSalary(Employee employee, int totalHours)
         {
             employee.TotalWorkingHoursPerMonth = totalHours;
@@ -60,7 +58,7 @@ namespace Payroll.Business.Services
                     break;
             }
 
-            _employeeRepository?.UpdateEmployee(employee);
+            _employeeService.UpdateEmployee(employee);
 
             return totalSalary;
         }

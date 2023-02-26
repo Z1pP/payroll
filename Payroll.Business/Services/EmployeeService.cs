@@ -28,5 +28,22 @@ namespace Payroll.Business.Services
         {
             _employeeRepository.RemoveEmplyee(employee);
         }
+
+        //Получаем список заданий которые выполнил сотрудник
+        public List<Mission> GetEmployeeMissions(int employeeId)
+        {
+            var employee = _employeeRepository.GetEmployeeById(employeeId);
+            if (employee == null)
+            {
+                throw new ArgumentException("Сотрудник не найден");
+            }
+
+            return _missionRepository.GetMissions().Where(mission => mission.EmployeeId == employeeId).ToList();
+        }
+
+        public void UpdateEmployee(Employee employee)
+        {
+            _employeeRepository.UpdateEmployee(employee);
+        }
     }
 }
