@@ -39,5 +39,11 @@ namespace Payroll.Web.Controllers
 
             return RedirectToAction("Index","Home");
         }
+
+        public IActionResult GetMissionByDate(DateTime startDate, int employeeId)
+        {
+            var report = _reportService.GetReportForEmployeeByDate(startDate, employeeId);
+            return View("Index", report);
+        }
     }
 }

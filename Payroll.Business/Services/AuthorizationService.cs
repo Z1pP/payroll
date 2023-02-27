@@ -25,12 +25,13 @@ namespace Payroll.Business.Services
         {
             var employee = _employeeRepository.GetEmployeeByName(name);
 
-            if (employee != null && employee.Role != role)
+            //Если такой сотрудник есть и его роль не повторяется
+            if (employee == null || employee.Role != role)
             {
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         //Создаем нового сотрудника

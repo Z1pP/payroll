@@ -1,4 +1,4 @@
-﻿using Payroll.DataAccess.Interfaces;
+﻿
 using Payroll.DataAccess.Models;
 
 namespace Payroll.Business.Services
@@ -19,12 +19,28 @@ namespace Payroll.Business.Services
 
             var employeeMissions = _employeeService.GetEmployeeMissions(id);
 
-            var totalTime = employeeMissions.Sum(x => x.WorkingTime);
+            return CreateReport(employee, employeeMissions);
+        }
+
+        //Получение отчета по зп через дату
+        public Report GetReportForEmployeeByDate(DateTime date, int id)
+        {
+            var employee = _employeeService.GetEmployeeById(id);
+
+            var employeeMissions = _employeeService.GetEmployeeMissions(id)
+                .Where(x => x.Date == date).ToList();
+
+            return CreateReport(employee, employeeMissions);
+        }
+
+        private Report CreateReport(Employee employee, List<Mission> missions)
+        {
+            var totalTime = missions.Sum(x => x.WorkingTime);
 
             var report = new Report
             {
                 Employee = employee,
-                Missions = employee.Missions,
+                Missions = missions,
                 Date = DateTime.Now,
                 TotalHours = totalTime,
                 TotalSalary = GetTotalSalary(employee, totalTime)

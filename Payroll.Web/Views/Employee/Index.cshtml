@@ -1,5 +1,5 @@
-﻿
-@model Report
+﻿@model Report
+
 @{
     Context.Session.TryGetEmployee(out Employee empl);
 }
@@ -11,7 +11,21 @@
 <h1>@Model.Employee.Name</h1>
 
 
-<button id="toggleButton" class="btn btn-outline-warning" onclick="toggleForms()">Добавить запись</button>
+<div class="row">
+    <div class="col">
+        <button id="toggleButton" class="btn btn-outline-warning" onclick="toggleForms()">Добавить запись</button>
+    </div>
+    <div class="col">
+        <form class="form-check-inline" action="@Url.Action("GetMissionByDate","Employee")" method="post">
+            <div class="form-group">
+                <input class="form-control" type="date" name="startDate" id="inputDate" />
+                <input class="form-control" type="hidden" name="employeeId" value="@Model.Employee.Id" />
+                <button type="submit" class="btn btn-primary">Посмотреть за период</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 <div id="form1" style="display: none;">
 
