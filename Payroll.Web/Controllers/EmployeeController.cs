@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Payroll.Business.Services;
-using Payroll.DataAccess.Models;
+using Payroll.DataAccess.Models.Employees;
 
 namespace Payroll.Web.Controllers
 {
@@ -38,6 +38,12 @@ namespace Payroll.Web.Controllers
             _employeeService?.RemoveEmployee(removedEmployee);
 
             return RedirectToAction("Index","Home");
+        }
+
+        public IActionResult GetMissionByDate(DateTime startDate, int employeeId)
+        {
+            var report = _reportService.GetReportForEmployeeByDate(startDate, employeeId);
+            return View("Index", report);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Payroll.Business.Services;
 using Payroll.DataAccess.Models;
+using Payroll.DataAccess.Models.Employees;
+using Payroll.DataAccess.Repositories;
 
 namespace Payroll.Web.Controllers
 {
@@ -17,7 +19,6 @@ namespace Payroll.Web.Controllers
         public IActionResult Add(Mission mission)
         {
             HttpContext.Session.TryGetEmployee(out Employee? employee);
-
             if (employee?.Role != "Manager" && employee?.Id != mission.EmployeeId)
             {
                 return BadRequest("Недостаточно доступа");
@@ -48,5 +49,6 @@ namespace Payroll.Web.Controllers
 
             return RedirectToAction("Details", "Employee", new { employeeId  = mission.EmployeeId});
         }
+
     }
 }

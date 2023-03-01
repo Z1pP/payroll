@@ -1,5 +1,6 @@
 ﻿using Payroll.DataAccess.Interfaces;
 using Payroll.DataAccess.Models;
+using Payroll.DataAccess.Models.Employees;
 
 namespace Payroll.Business.Services
 {
@@ -45,5 +46,6 @@ namespace Payroll.Business.Services
         {
             _employeeRepository.UpdateEmployee(employee);
         }
+
     }
 }

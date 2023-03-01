@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Payroll.DataAccess.DataBase;
 
@@ -11,9 +12,11 @@ using Payroll.DataAccess.DataBase;
 namespace Payroll.DataAccess.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230227210245_AddDateToEmployee")]
+    partial class AddDateToEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace Payroll.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Payroll.DataAccess.Models.Employees.Employee", b =>
+            modelBuilder.Entity("Payroll.DataAccess.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,10 +36,6 @@ namespace Payroll.DataAccess.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -45,16 +44,12 @@ namespace Payroll.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalHoursWorked")
+                    b.Property<int>("TotalWorkingHoursPerMonth")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Employee");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Payroll.DataAccess.Models.Mission", b =>
@@ -85,30 +80,9 @@ namespace Payroll.DataAccess.Migrations
                     b.ToTable("Missions");
                 });
 
-            modelBuilder.Entity("Payroll.DataAccess.Models.Employees.Freelancer", b =>
-                {
-                    b.HasBaseType("Payroll.DataAccess.Models.Employees.Employee");
-
-                    b.HasDiscriminator().HasValue("Freelancer");
-                });
-
-            modelBuilder.Entity("Payroll.DataAccess.Models.Employees.Manager", b =>
-                {
-                    b.HasBaseType("Payroll.DataAccess.Models.Employees.Employee");
-
-                    b.HasDiscriminator().HasValue("Manager");
-                });
-
-            modelBuilder.Entity("Payroll.DataAccess.Models.Employees.Worker", b =>
-                {
-                    b.HasBaseType("Payroll.DataAccess.Models.Employees.Employee");
-
-                    b.HasDiscriminator().HasValue("Worker");
-                });
-
             modelBuilder.Entity("Payroll.DataAccess.Models.Mission", b =>
                 {
-                    b.HasOne("Payroll.DataAccess.Models.Employees.Employee", "Employee")
+                    b.HasOne("Payroll.DataAccess.Models.Employee", "Employee")
                         .WithMany("Missions")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -117,7 +91,7 @@ namespace Payroll.DataAccess.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("Payroll.DataAccess.Models.Employees.Employee", b =>
+            modelBuilder.Entity("Payroll.DataAccess.Models.Employee", b =>
                 {
                     b.Navigation("Missions");
                 });

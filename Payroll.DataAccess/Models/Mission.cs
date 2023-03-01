@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Payroll.DataAccess.Models.Employees;
 
 namespace Payroll.DataAccess.Models
 {

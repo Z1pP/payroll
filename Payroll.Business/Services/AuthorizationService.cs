@@ -1,5 +1,6 @@
 ﻿using Payroll.DataAccess.Interfaces;
-using Payroll.DataAccess.Models;
+using Payroll.DataAccess.Models.Employees;
+using Payroll.DataAccess.Repositories;
 
 namespace Payroll.Business.Services
 {
@@ -25,18 +26,28 @@ namespace Payroll.Business.Services
         {
             var employee = _employeeRepository.GetEmployeeByName(name);
 
-            if (employee != null && employee.Role != role)
+            //Если такой сотрудник есть и его роль не повторяется
+            if (employee == null || employee.Role != role)
             {
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         //Создаем нового сотрудника
         public void AddEmployee(string name, string role)
         {
-            _employeeRepository.SaveEmployee(new Employee(name, role));
+            Employee employee = role switch
+            {
+                "Manager" => new Manager(name, role),
+                "Worker" => new Worker(name, role),
+                "Freelancer" => new Freelancer(name, role),
+                _ => throw new ArgumentException("Данная должность отсутсвует", name)
+            };
+
+            _employeeRepository.SaveEmployee(employee);
         }
     }
+
 }

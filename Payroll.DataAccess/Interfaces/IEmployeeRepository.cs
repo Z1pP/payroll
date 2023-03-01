@@ -1,4 +1,4 @@
-﻿using Payroll.DataAccess.Models;
+﻿using Payroll.DataAccess.Models.Employees;
 
 namespace Payroll.DataAccess.Interfaces
 {

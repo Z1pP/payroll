@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Payroll.DataAccess.Models;
+using Payroll.DataAccess.Models.Employees;
 
 namespace Payroll.DataAccess.DataBase
 {
@@ -14,10 +15,11 @@ namespace Payroll.DataAccess.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Employee>()
-                        .HasMany(e => e.Missions)
-                        .WithOne(m => m.Employee)
-                        .HasForeignKey(m => m.EmployeeId);
+            modelBuilder.Entity<Manager>();
+            modelBuilder.Entity<Worker>();
+            modelBuilder.Entity<Freelancer>();
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
