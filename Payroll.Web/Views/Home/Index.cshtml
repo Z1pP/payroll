@@ -29,7 +29,7 @@
                     <td>@employee.Date.ToString("dd.MM.yyyy")</td>
                     <td>@employee.Name</td>
                     <td>@employee.Role</td>
-                    <td>@employee.TotalWorkingHoursPerMonth</td>
+                    <td>@employee.TotalHoursWorked</td>
                     <td>
                         <form action="@Url.Action("Details","Employee")" method="post">
                             <input type="hidden" name="employeeId" value="@employee.Id">
@@ -66,7 +66,7 @@ else if (empl.Role == "Worker")
                 <td>@employee.Id</td>
                 <td>@employee.Name</td>
                 <td>@employee.Role</td>
-                <td>@employee.TotalWorkingHoursPerMonth</td>
+                <td>@employee.TotalHoursWorked</td>
                 <td>
                     @if (employee.Id == empl.Id)
                     {
@@ -100,7 +100,7 @@ else
                 <td>@employee.Id</td>
                 <td>@employee.Name</td>
                 <td>@employee.Role</td>
-                <td>@employee.TotalWorkingHoursPerMonth</td>
+                <td>@employee.TotalHoursWorked</td>
                 <td>
                     @if (employee.Id == empl.Id)
                     {

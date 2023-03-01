@@ -1,6 +1,6 @@
 ﻿using Payroll.DataAccess.DataBase;
 using Payroll.DataAccess.Interfaces;
-using Payroll.DataAccess.Models;
+using Payroll.DataAccess.Models.Employees;
 
 namespace Payroll.DataAccess.Repositories
 {

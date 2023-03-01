@@ -1,4 +1,6 @@
-﻿namespace Payroll.DataAccess.Models
+﻿using Payroll.DataAccess.Models.Employees;
+
+namespace Payroll.DataAccess.Models
 {
     public class Report
     {

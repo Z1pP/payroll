@@ -1,5 +1,6 @@
-﻿using System.Text;
-using Payroll.DataAccess.Models;
+﻿using System.Data;
+using System.Text;
+using Payroll.DataAccess.Models.Employees;
 
 namespace Payroll.Web
 {
@@ -18,7 +19,7 @@ namespace Payroll.Web
                 writer.Write(employee.Id);
                 writer.Write(employee.Name);
                 writer.Write(employee.Role);
-                writer.Write(employee.TotalWorkingHoursPerMonth);
+                writer.Write(employee.TotalHoursWorked);
 
                 session.Set(key, stream.ToArray());
             }
@@ -35,10 +36,23 @@ namespace Payroll.Web
                     var employeeRole = reader.ReadString();
                     var employeeTotalWorkingHours = reader.ReadInt32();
 
-                     employee = new Employee(employeeName,employeeRole)
+                    employee = employeeRole switch
                     {
-                        Id=employeeId,
-                        TotalWorkingHoursPerMonth = employeeTotalWorkingHours
+                        "Manager" => new Manager(employeeName, employeeRole)
+                        {
+                            Id = employeeId, TotalHoursWorked = employeeTotalWorkingHours
+                        },
+                        "Worker" => new Worker(employeeName, employeeRole)
+                        {
+                            Id = employeeId,
+                            TotalHoursWorked = employeeTotalWorkingHours
+                        },
+                        "Freelancer" => new Freelancer(employeeName, employeeRole)
+                        {
+                            Id = employeeId,
+                            TotalHoursWorked = employeeTotalWorkingHours
+                        },
+                        _ => throw new ArgumentException("Данная должность отсутсвует", employeeName)
                     };
 
                     return true;

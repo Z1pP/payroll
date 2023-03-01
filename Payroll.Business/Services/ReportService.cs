@@ -1,8 +1,9 @@
 ﻿
 using Payroll.DataAccess.Models;
+using Payroll.DataAccess.Models.Employees;
 
 namespace Payroll.Business.Services
-{    
+{
     public class ReportService
     {
         private static EmployeeService? _employeeService;
@@ -52,27 +53,7 @@ namespace Payroll.Business.Services
         //Проводим рассчеты Зп исходя из задания для каждого отдельного сотрудника
         private static decimal GetTotalSalary(Employee employee, int totalHours)
         {
-            employee.TotalWorkingHoursPerMonth = totalHours;
-
-            decimal totalSalary;
-
-            switch (employee.Role)
-            {
-                case "Manager":
-                {
-                    totalSalary = (decimal)employee.TotalWorkingHoursPerMonth / 160 * 200000m;
-
-                    if (totalHours > 160)
-                        totalSalary += 20000; // премия
-                    break;
-                }
-                case "Worker":
-                    totalSalary = (decimal)employee.TotalWorkingHoursPerMonth / 160 * 120000m;
-                    break;
-                default:
-                    totalSalary = 1000 * (decimal)employee.TotalWorkingHoursPerMonth;
-                    break;
-            }
+            decimal totalSalary = employee.GetSalary(totalHours);
 
             _employeeService.UpdateEmployee(employee);
 

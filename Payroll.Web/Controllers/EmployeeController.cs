@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Payroll.Business.Services;
-using Payroll.DataAccess.Models;
+using Payroll.DataAccess.Models.Employees;
 
 namespace Payroll.Web.Controllers
 {

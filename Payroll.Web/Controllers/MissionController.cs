@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Payroll.Business.Services;
 using Payroll.DataAccess.Models;
+using Payroll.DataAccess.Models.Employees;
 using Payroll.DataAccess.Repositories;
 
 namespace Payroll.Web.Controllers
