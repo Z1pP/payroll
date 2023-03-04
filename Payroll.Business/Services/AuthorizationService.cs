@@ -1,14 +1,13 @@
 ﻿using Payroll.DataAccess.Interfaces;
 using Payroll.DataAccess.Models.Employees;
-using Payroll.DataAccess.Repositories;
 
 namespace Payroll.Business.Services
 {
 
     public class AuthorizationService
     {
-        private readonly IEmployeeRepository _employeeRepository;
-        public AuthorizationService(IEmployeeRepository employeeRepository)
+        private readonly IBaseRepository<Employee> _employeeRepository;
+        public AuthorizationService(IBaseRepository<Employee> employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
@@ -16,7 +15,8 @@ namespace Payroll.Business.Services
         //Получаем должность сотрудника
         public Employee GetRoleEmployee(string name)
         {
-            var employee = _employeeRepository.GetEmployeeByName(name);
+            var employee = _employeeRepository.GetAll()
+                .SingleOrDefault(x => x.Name == name);
 
             return employee;
         }
@@ -24,19 +24,18 @@ namespace Payroll.Business.Services
         //Проверяем существует ли такой сотрудник в Бд
         public bool EmployeeExist(string name, string role)
         {
-            var employee = _employeeRepository.GetEmployeeByName(name);
+            var employee = _employeeRepository.GetAll()
+                .SingleOrDefault(x => x.Name == name && x.Role == role);
 
             //Если такой сотрудник есть и его роль не повторяется
-            if (employee == null || employee.Role != role)
-            {
+            if (employee == null)
                 return false;
-            }
 
             return true;
         }
 
         //Создаем нового сотрудника
-        public void AddEmployee(string name, string role)
+        public async Task AddEmployee(string name, string role)
         {
             Employee employee = role switch
             {
@@ -46,7 +45,7 @@ namespace Payroll.Business.Services
                 _ => throw new ArgumentException("Данная должность отсутсвует", name)
             };
 
-            _employeeRepository.SaveEmployee(employee);
+            await _employeeRepository.Create(employee);
         }
     }
 

@@ -6,10 +6,10 @@ namespace Payroll.Business.Services
 {
     public class EmployeeService
     {
-        private readonly IEmployeeRepository _employeeRepository;
-        private readonly IMissionRepository _missionRepository;
+        private readonly IBaseRepository<Employee> _employeeRepository;
+        private readonly IBaseRepository<Mission> _missionRepository;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IMissionRepository missionRepository)
+        public EmployeeService(IBaseRepository<Employee> employeeRepository, IBaseRepository<Mission> missionRepository)
         {
             _employeeRepository = employeeRepository;
             _missionRepository = missionRepository;
@@ -17,34 +17,30 @@ namespace Payroll.Business.Services
 
         public List<Employee> GetEmployees()
         {
-            return _employeeRepository.GetEmployees();
+            return _employeeRepository.GetAll().ToList();
         }
 
         public Employee GetEmployeeById(int id)
         {
-            return _employeeRepository.GetEmployeeById(id);
+            return GetEmployees().SingleOrDefault(x => x.Id == id);
         }
 
-        public void RemoveEmployee(Employee employee)
+        public async Task RemoveEmployee(Employee employee)
         {
-            _employeeRepository.RemoveEmplyee(employee);
+            await _employeeRepository.Delete(employee);
         }
 
         //Получаем список заданий которые выполнил сотрудник
-        public List<Mission> GetEmployeeMissions(int employeeId)
+        public List<Mission> GetEmployeeMissions(int id)
         {
-            var employee = _employeeRepository.GetEmployeeById(employeeId);
-            if (employee == null)
-            {
-                throw new ArgumentException("Сотрудник не найден");
-            }
-
-            return _missionRepository.GetMissions().Where(mission => mission.EmployeeId == employeeId).ToList();
+            return _missionRepository.GetAll()
+                .Where(x => x.EmployeeId == id)
+                .ToList();
         }
 
         public void UpdateEmployee(Employee employee)
         {
-            _employeeRepository.UpdateEmployee(employee);
+            _employeeRepository.Update(employee);
         }
 
     }

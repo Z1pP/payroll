@@ -7,7 +7,7 @@ namespace Payroll.Web.Models
     public class EmployeeViewModel
     {
 
-        private IEmployeeRepository _employeeRepository;
+        private IBaseRepository<Employee> _employeeRepository;
         public  Employee Employee { get; set; }
         public  List<Employee> Employees { get; set; }
 
@@ -15,8 +15,10 @@ namespace Payroll.Web.Models
         {
             _employeeRepository = new EmployeeRepository();
 
-            Employee = _employeeRepository.GetEmployeeById(id);
-            Employees = _employeeRepository.GetEmployees();
+            Employee = _employeeRepository.GetAll()
+                .SingleOrDefault(x => x.Id == id);
+            Employees = _employeeRepository.GetAll()
+                .ToList();
         }
 
     }
