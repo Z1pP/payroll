@@ -1,0 +1,36 @@
+﻿ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+}
+
+.message .time {
+    font-size: 0.8em;
+    margin-bottom: 5px;
+}
+
+.message-right {
+    text-align: right;
+    background-color: #007bff;
+    color: white;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+}
+
+.message-left {
+    text-align: left;
+    background-color: #f1f0f0;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+}

@@ -8,6 +8,7 @@ namespace Payroll.DataAccess.DataBase
     {
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Mission> Missions { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
         public MyDbContext(DbContextOptions<MyDbContext> options):base(options)
         {
             Database.EnsureCreated();

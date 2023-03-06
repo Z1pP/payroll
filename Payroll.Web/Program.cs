@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.EntityFrameworkCore;
 using Payroll.Business.Services;
 using Payroll.DataAccess.DataBase;
@@ -5,6 +6,7 @@ using Payroll.DataAccess.Interfaces;
 using Payroll.DataAccess.Models;
 using Payroll.DataAccess.Models.Employees;
 using Payroll.DataAccess.Repositories;
+using Payroll.Web.Hub;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,13 +22,17 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddSignalR();
 
 builder.Services.AddScoped<IBaseRepository<Employee>, EmployeeRepository>();
 builder.Services.AddScoped<IBaseRepository<Mission>, MissionRepository>();
+builder.Services.AddScoped<IBaseRepository<ChatMessage>, ChatRepository>();
 builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<MissionService>();
 builder.Services.AddScoped<ReportService>();
+builder.Services.AddScoped<ChatService>();
+
 
 
 var app = builder.Build();
@@ -54,5 +60,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Authorization}/{action=Index}/{id?}");
+app.UseEndpoints(endpoint =>
+    endpoint.MapHub<ChatHub>("/chat"));
 
 app.Run();
