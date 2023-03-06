@@ -1,65 +1,95 @@
 ﻿@model List<Employee>
 
+
+
 @{
     ViewData["Title"] = "Домашняя страница";
     Context.Session.TryGetEmployee(out Employee? empl);
 }
-
+<head>
+    <link rel="stylesheet" href="css/chat.css" />
+</head>
 <h1>Добро пожаловать @empl.Name</h1>
 <h2>Ваша роль - @empl.Role</h2>
 
-<table class="table">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Регистрация</th>
-            <th scope="col">Имя</th>
-            <th scope="col">Должность</th>
-            <th scope="col">Всего часов</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var employee in Model)
-        {
-            <tr>                   
-                <td>@employee.Id</td>
-                <td>@employee.Date.ToString("dd.MM.yyyy")</td>
-                <td>@employee.Name</td>
-                <td>@employee.Role</td>
-                <td>@employee.TotalHoursWorked</td>
+<div class="container"/>
+<div class="row">
+    <div class="col-md-8">
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Регистрация</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Должность</th>
+                <th scope="col">Всего часов</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var employee in Model)
+            {
+                <tr>
+                    <td>@employee.Id</td>
+                    <td>@employee.Date.ToString("dd.MM.yyyy")</td>
+                    <td>@employee.Name</td>
+                    <td>@employee.Role</td>
+                    <td>@employee.TotalHoursWorked</td>
 
-                @if (empl is Manager)
-                {
-                    //Менеджеру разрешено просматривать и изменять все записи
-                    <td>
-                        <form action="@Url.Action("Details","Employee")" method="post">
-                            <input type="hidden" name="employeeId" value="@employee.Id">
-                            <button class="btn btn-info">Отчет</button>
-                        </form>                           
-                    </td>
-
-                    <td>
-                        <form action="@Url.Action("Remove","Employee")" method="post">
-                            <input type="hidden" name="employeeId" value="@employee.Id">
-                            <button class="btn btn-danger">Удалить</button>
-                        </form>
-                    </td>
-                }
-                else
-                {
-                    // Остальные сотрудники могут просматривать и изменять лишь себя
-                    if (employee.Id == empl.Id)
+                    @if (empl is Manager)
                     {
+                        //Менеджеру разрешено просматривать и изменять все записи
                         <td>
                             <form action="@Url.Action("Details","Employee")" method="post">
                                 <input type="hidden" name="employeeId" value="@employee.Id">
                                 <button class="btn btn-info">Отчет</button>
                             </form>
                         </td>
-                    }
-                }
-            </tr>
-        }
-    </tbody>       
-</table>
 
+                        <td>
+                            <form action="@Url.Action("Remove","Employee")" method="post">
+                                <input type="hidden" name="employeeId" value="@employee.Id">
+                                <button class="btn btn-danger">Удалить</button>
+                            </form>
+                        </td>
+                    }
+                    else
+                    {
+                        // Остальные сотрудники могут просматривать и изменять лишь себя
+                        if (employee.Id == empl.Id)
+                        {
+                            <td>
+                                <form action="@Url.Action("Details","Employee")" method="post">
+                                    <input type="hidden" name="employeeId" value="@employee.Id">
+                                    <button class="btn btn-info">Отчет</button>
+                                </form>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-4">
+        <div class="container">
+            <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Чат</h5>
+            </div>
+            <div class="card-body" style="position: relative; height: 400px; overflow-y: scroll;">
+                <ul id="messagesList"></ul>
+            </div>
+            <div class="card-footer">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="messageInput" placeholder="Type your message...">
+                    <button class="btn btn-primary" id="sendButton">Отправить</button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="js/chat.js"></script>
