@@ -5,32 +5,33 @@ namespace Payroll.Business.Services
 {
     public class MissionService
     {
-        private readonly IMissionRepository _missionRepository;
+        private readonly IBaseRepository<Mission> _missionRepository;
 
-        public MissionService(IMissionRepository missionRepository)
+        public MissionService(IBaseRepository<Mission> missionRepository)
         {
             _missionRepository = missionRepository;
         }
 
         public void SaveMission(Mission mission)
         {
-            _missionRepository.SaveMission(mission);
+            _missionRepository.Create(mission);
         }
 
         public void RemoveMission(Mission mission)
         {
-            _missionRepository.RemoveMission(mission);
+            _missionRepository.Delete(mission);
         }
 
         public Mission GetMissionById(int id)
         {
-            return _missionRepository.GetMissionById(id);
+            return _missionRepository.GetAll()
+                .SingleOrDefault(x => x.Id == id);
         }
 
         public void UpdateMission(Mission mission)
         {
 
-            _missionRepository.UpdateMission(mission);
+            _missionRepository.Update(mission);
         }
 
         

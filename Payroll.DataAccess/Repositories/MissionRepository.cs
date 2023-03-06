@@ -4,9 +4,9 @@ using Payroll.DataAccess.Models;
 
 namespace Payroll.DataAccess.Repositories
 {
-    public class MissionRepository : IMissionRepository
+    public class MissionRepository : IBaseRepository<Mission>
     {
-        private MyDbContext dbContext;
+        private MyDbContext _dbContext;
 
         public MissionRepository()
         {
@@ -14,38 +14,32 @@ namespace Payroll.DataAccess.Repositories
         }
         public MissionRepository(MyDbContext dbContext)
         {
-            this.dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
-        public void RemoveMission(Mission mission)
+        public IQueryable<Mission> GetAll()
         {
-            dbContext.Missions.RemoveRange(mission);
-            dbContext.SaveChanges();
+            return _dbContext.Missions;
         }
 
-        public List<Mission> GetMissions()
+        public async Task Delete(Mission entity)
         {
-            return dbContext.Missions.ToList();
+            _dbContext.Missions.Remove(entity);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void SaveMission(Mission mission)
+        public async Task Create(Mission entity)
         {
-            dbContext.Missions.Add(mission);
-
-            dbContext.SaveChanges();
+            await _dbContext.Missions.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Mission GetMissionById(int id)
+        public async Task<Mission> Update(Mission entity)
         {
-            var mission = dbContext.Missions.SingleOrDefault(x => x.Id == id);
+            _dbContext.Missions.Update(entity);
+            await _dbContext.SaveChangesAsync();
 
-            return mission;
-        }
-
-        public void UpdateMission(Mission mission)
-        {
-            dbContext.Missions.Update(mission);
-            dbContext.SaveChanges();
+            return entity;
         }
     }
 }

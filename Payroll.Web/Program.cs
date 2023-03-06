@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Payroll.Business.Services;
 using Payroll.DataAccess.DataBase;
 using Payroll.DataAccess.Interfaces;
+using Payroll.DataAccess.Models;
+using Payroll.DataAccess.Models.Employees;
 using Payroll.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,8 +21,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<IMissionRepository, MissionRepository>();
+builder.Services.AddScoped<IBaseRepository<Employee>, EmployeeRepository>();
+builder.Services.AddScoped<IBaseRepository<Mission>, MissionRepository>();
 builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<MissionService>();
